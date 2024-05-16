@@ -1,6 +1,6 @@
 # Nursing Home Ratings 
 
-This repository contains data and code to reproduce the data findings in [Title], published on [Date]. This investigation focused on a particular nursing home that held onto a 5-star CMS rating, despite a client dying after the home put her in "immediate jeopardy."
+This repository contains data and code to reproduce the data findings in [High ratings for nursing homes may not give full story about care problems, deaths](https://www.scrippsnews.com/investigations/high-ratings-for-nursing-homes-may-not-give-full-story-about-care-problems-deaths), published on May 15, 2024. This investigation focused on a particular nursing home that held onto a 5-star CMS rating, despite a client dying after the home put her in "immediate jeopardy."
 
 > OUR SCRIPPS NEWS ANALYSIS OF GOVERNMENT DATA FROM FEBRUARY 2024 FOUND 247 NURSING HOMES ACROSS THE UNITED STATES...IN SIMILAR SITUATIONS -- HOLDING TOP OVERALL RATINGS -- A FOUR OR A FIVE - DESPITE "IMMEDIATE JEOPARDY” FINDINGS THAT RESIDENTS HAD BEEN PLACED AT RISK IN THE LAST THREE YEARS -- SINCE FEBRUARY 2021.
 
@@ -59,7 +59,7 @@ Our analysis only uses the snapshot of cut points from February of 2024. -- NH_H
 ## ETL
 
 ### Download all years of provider-level ratings data
-The code for this step is in (etl/8_download_all_years_cms.py)[etl/8_download-all_years_cms.py]
+The code for this step is in [etl/1_download_all_years_cms.py](etl/1_download_all_years_cms.py)
 
 We unzipped all of the available snapshots and resaved all csv files as parquet files for easier storage and access, keeping their original filename. We saved them in the folder `data/source/nursinghome-compare/` and then in subdirectories by four digit year and two digit month `{YYYY}/{MM}`.
 
@@ -79,7 +79,7 @@ YYY: \"Federal Provider Number\"
 XXX:  \"CMS Certification Number (CCN)\", \"Provider Name\", \"State\", \"Overall Rating\", \"Health Inspection Rating\", \"Processing Date\"
 YYYY:  \"CMS Certification Number (CCN)\"
 
-[etl/ratings-sql-macro.sql](etl/ratings-sql-macro.sql) was constructed by running the following in `data/source/nursinghome-compare` directory
+[etl/2_ratings_sql_macro.sql](etl/2_ratings_sql_macro.sql) was constructed by running the following in `data/source/nursinghome-compare` directory
 
 ```bash
 find "." | grep NH_ProviderInfo | sort  | xargs printf "select \"Federal Provider Number\", \"Provider Name\", \"Provider State\", \"Overall Rating\", \"Health Inspection Rating\", \"Processing Date\" from '%s' where \"Federal Provider Number\" like 'NNN';\n"
@@ -105,7 +105,7 @@ To track the overall ratings over time for Touchmark on South Hill, Willowbrooke
 
 To count the number of 4 or 5 star homes that would have 1 star in another state, by their numeric Health Inspection Score, we find the lowest cut-points for every tier and save them to a table. The state with the lowest 1-star cut point is Alabama, at 33.667. -- **cutoffs**
 
-We then create the field "worst_inspection", which recalculates health inspection ratings for every home in **ratings_and_scores**(loaded from NH_ProviderInfo_Feb2024.parquet), using the cut points in **cutoffs**. Relying on the Overall Star Rating methodology published here [https://www.cms.gov/medicare/provider-enrollment-and-certification/certificationandcomplianc/downloads/usersguide.pdf)](https://www.cms.gov/medicare/provider-enrollment-and-certification/certificationandcomplianc/downloads/usersguide.pdf) we recalculate overall star ratings using "worst_inspection", to create the field "worst_rating".
+We then create the field "worst_inspection", which recalculates health inspection ratings for every home in **ratings_and_scores**(loaded from NH_ProviderInfo_Feb2024.parquet), using the cut points in **cutoffs**. Relying on the Overall Star Rating methodology published here [https://www.cms.gov/medicare/provider-enrollment-and-certification/certificationandcomplianc/downloads/usersguide.pdf](https://www.cms.gov/medicare/provider-enrollment-and-certification/certificationandcomplianc/downloads/usersguide.pdf) we recalculate overall star ratings using "worst_inspection", to create the field "worst_rating".
 
 >Step 1: Start with the health inspection rating.
 >Step 2: Add one star to the Step 1 result if the staffing rating is five stars; subtract one star if the staffing rating is one star. The overall rating cannot be more than five stars or less than one star.
