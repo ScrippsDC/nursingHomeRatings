@@ -63,7 +63,7 @@ The code for this step is in [etl/1_download_all_years_cms.py](etl/1_download_al
 
 We unzipped all of the available snapshots and resaved all csv files as parquet files for easier storage and access, keeping their original filename. We saved them in the folder `data/source/nursinghome-compare/` and then in subdirectories by four digit year and two digit month `{YYYY}/{MM}`.
 
-## Create an SQL macro to 
+## Create an SQL macro to query a nursinghome over time
 
 To combine our provider information snapshots into a single result across years, we use a`shell script to generate the SQL queries to be used in a macro. This avoids creating a new data table with multiple years and allows more flexible querying. One reason this is needed is that the data format changed in May 2023 and we wanted to directly query the raw data wherever possible.
 
