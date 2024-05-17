@@ -1,6 +1,6 @@
 # Nursing Home Ratings 
 
-This repository contains data and code to reproduce the data findings in [High ratings for nursing homes may not give full story about care problems, deaths](https://www.scrippsnews.com/investigations/high-ratings-for-nursing-homes-may-not-give-full-story-about-care-problems-deaths), published on May 15, 2024. This investigation focused on a particular nursing home that held onto a 5-star CMS rating, despite a client dying after the home put her in "immediate jeopardy."
+This repository contains data and code to reproduce the data findings in [High ratings for nursing homes may not give full story about care problems, deaths](https://www.scrippsnews.com/investigations/high-ratings-for-nursing-homes-may-not-give-full-story-about-care-problems-deaths) by [Daniel Lathrop](https://github.com/lathropd), [Amy Fan](https://github.com/amyafan), Lori Jane Gliha, and Brittany Freeman, published on May 15, 2024. This investigation focuses on a particular nursing home that held onto a 5-star CMS rating, despite a client dying after the home put her in "immediate jeopardy."
 
 > OUR SCRIPPS NEWS ANALYSIS OF GOVERNMENT DATA FROM FEBRUARY 2024 FOUND 247 NURSING HOMES ACROSS THE UNITED STATES...IN SIMILAR SITUATIONS -- HOLDING TOP OVERALL RATINGS -- A FOUR OR A FIVE - DESPITE "IMMEDIATE JEOPARDY” FINDINGS THAT RESIDENTS HAD BEEN PLACED AT RISK IN THE LAST THREE YEARS -- SINCE FEBRUARY 2021.
 
@@ -9,7 +9,6 @@ This repository contains data and code to reproduce the data findings in [High r
 We also mention two other nursing homes in the story that have held onto top ratings after an immediate jeopardy finding.
 
 > A SCRIPPS NEWS ANALYSIS FOUND 397 FOUR AND FIVE STAR NURSING HOMES ACROSS THE COUNTRY COULD POTENTIALLY HAVE JUST ONE STAR BY ANOTHER STATE’S STANDARDS.
-
 
 ## Data Sources
 ### Nursing homes including rehab services archived data snapshots
