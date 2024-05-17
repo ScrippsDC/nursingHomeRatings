@@ -15,9 +15,9 @@ We also mention two other nursing homes in the story that have held onto top rat
 ### Nursing homes including rehab services archived data snapshots
 [https://data.cms.gov/provider-data/archived-data/nursing-homes](https://data.cms.gov/provider-data/archived-data/nursing-homes)
 
-Monthly snapshots of the dataset CMS maintains of nursing home and rehab services, including their health rating and their overall rating.
+Monthly snapshots of the datasets CMS maintains of nursing home and rehab services, including their health rating and their overall rating.
 
-Each snapshot is a zipfile that mostly contains csvs. We generally resaved these as parquet files for easier storage and access. The files relevant to our analysis are:
+Each snapshot is a zipfile that mostly contains CSVs. In ETL, we resave these as parquet files for easier storage and access. The files relevant to our analysis are:
 
 * Provider information
 * Health deficiencies
@@ -32,7 +32,7 @@ By combining every available provider information file in the snapshots, we are 
 
 In these filenames, month is formatted as a three-letter abbreviation with the first letter capitalized ("Feb", "Jun", etc), and year is formatted as the full four-digit year.
 
-More complete documentation is available at [data/documentation/NH_Data_Dictionary.pdf](data/documentation/NH_Data_Dictionary.pdf)
+More complete documentation is available on the [CMS website](https://data.cms.gov/provider-data/sites/default/files/data_dictionaries/nursing_home/NH_Data_Dictionary.pdf)
 
 #### Health deficiencies
 From [https://data.cms.gov/provider-data/dataset/r5ix-sfxw](https://data.cms.gov/provider-data/dataset/r5ix-sfxw):
@@ -63,11 +63,9 @@ The code for this step is in [etl/1_download_all_years_cms.py](etl/1_download_al
 
 We unzipped all of the available snapshots and resaved all csv files as parquet files for easier storage and access, keeping their original filename. We saved them in the folder `data/source/nursinghome-compare/` and then in subdirectories by four digit year and two digit month `{YYYY}/{MM}`.
 
-## Create an SQL macro to query a nursinghome over time
+### Create a SQL macro to query a nursing home over time
 
 To combine our provider information snapshots into a single result across years, we use a`shell script to generate the SQL queries to be used in a macro. This avoids creating a new data table with multiple years and allows more flexible querying. One reason this is needed is that the data format changed in May 2023 and we wanted to directly query the raw data wherever possible.
-
-The SQL statements used with the macro are generated using `find` command in the shell. 
 
 **Earlier files**
 \
@@ -79,7 +77,9 @@ YYY: \"Federal Provider Number\"
 XXX:  \"CMS Certification Number (CCN)\", \"Provider Name\", \"State\", \"Overall Rating\", \"Health Inspection Rating\", \"Processing Date\"
 YYYY:  \"CMS Certification Number (CCN)\"
 
-[etl/2_ratings_sql_macro.sql](etl/2_ratings_sql_macro.sql) was constructed by running the following in `data/source/nursinghome-compare` directory
+The SQL statements used with the macro are generated using `find` command in the shell. 
+
+[etl/2_ratings_sql_macro.sql](etl/2_ratings_sql_macro.sql) was constructed by running the following in `data/source/nursinghome-compare` directory:
 
 ```bash
 find "." | grep NH_ProviderInfo | sort  | xargs printf "select \"Federal Provider Number\", \"Provider Name\", \"Provider State\", \"Overall Rating\", \"Health Inspection Rating\", \"Processing Date\" from '%s' where \"Federal Provider Number\" like 'NNN';\n"
@@ -87,7 +87,7 @@ find "." | grep NH_ProviderInfo | sort  | xargs printf "select \"Federal Provide
 find "." | grep NH_ProviderInfo | sort  | xargs printf "select  \"CMS Certification Number (CCN)\",\"Provider Name\", \"State\", \"Overall Rating\", \"Health Inspection Rating\", \"Processing Date\" from '%s' where \"CMS Certification Number (CCN)\" like 'NNN';\n"
 ```
 
-We then join the SELECT statements with UNION ALL into a script defining a macro "ratings_by_provider_over_time", which takes provider number as an argument, and we fix the path names to be runnable from our notebook.
+We then joined the SELECT statements with UNION ALL into a script defining a macro "ratings_by_provider_over_time", which takes provider number as an argument, and we fix the path names to be runnable from our notebook.
 
 We run this sql script from within our analysis notebook: [analysis/final_analysis_notebook.ipynb](analysis/final_analysis_notebook.ipynb)
 
