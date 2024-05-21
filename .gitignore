@@ -1,13 +1,7 @@
-AF_log.md
-API_KEY.csv
-
 *.ipynb_checkpoints
-
 *.DS_Store
 
 etl/notebooks/
 
 data/source/
 data/processed/etl_1_statement_of_deficiencies.parquet
-etl/notebooks/1_etl.ipynb
-etl/notebooks/2_Ratings.ipynb
